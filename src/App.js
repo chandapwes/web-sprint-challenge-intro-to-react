@@ -3,6 +3,25 @@ import './App.css'
 import Character from './components/Character'
 import axios from 'axios';
 import {handlers} from './mocks/handlers'
+import styled, { keyframes } from 'styled-components'
+
+const kf = keyframes`
+100% {
+  opacity: 1;
+}
+`
+
+const StyledCharacter = styled.div`
+  display: flex;
+  justify-content: space-around;
+  color: red;
+  width: 100%;
+
+  @media (max-width: 500px) {
+    width: 80%;
+  }
+`
+
 
 const App = () => {
   const [characters, setCharacters] = useState([]);
@@ -20,7 +39,7 @@ const App = () => {
   }
 
 useEffect(() => {
-  axios.get(`${handlers}`)
+  axios.get('https://swapi.dev/api/people')
     .then(res => {
       console.log(res);
       setCharacters(res.data)
@@ -34,13 +53,16 @@ const AddCharacter = (props) => (
   <div className='character'>
     {props.info.name}
     <button onClick={() => openDetails(props.info.id)}>See details</button>
+    <br></br>
   </div>
+  
 );
   // Fetch characters from the API in an effect hook. Remember, anytime you have a 
   // side effect in a component, you want to think about which state and/or props it should
   // sync up with, if any.
 
   return (
+    <StyledCharacter>
     <div className="App">
       <h1 className="Header">Characters</h1>
       {
@@ -52,6 +74,7 @@ const AddCharacter = (props) => (
       <Character characterId={currentCharacterId} close={closeDetails}/>
     )} 
     </div>
+  </StyledCharacter>
   );
 }
 
